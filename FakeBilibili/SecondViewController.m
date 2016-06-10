@@ -45,14 +45,35 @@ static NSString *kTableViewCellIdentifie = @"SecondTableCellIdentifier";
     [self.tableView.tableFooterView addSubview:self.tableFooter];
     [self loadLayout];
     
-    @weakify(self)
-    [[self.textField.rac_textSignal
-     map:^id(NSString *text) {
-         return [self isValidTextField:text] ? [UIColor whiteColor] : [UIColor darkGrayColor];
+//    @weakify(self)
+//    [[self.textField.rac_textSignal
+//     map:^id(NSString *text) {
+//         return [self isValidTextField:text] ? [UIColor whiteColor] : [UIColor darkGrayColor];
+//     }]
+//     subscribeNext:^(UIColor *color) {
+//         @strongify(self)
+//         self.textField.backgroundColor = color;
+//     }];
+    
+    RACSignal *validTextFieldSignal = [self.textField.rac_textSignal
+                                       map:^id(NSString *text) {
+                                           return @([self isValidTextField:text]);
+                                       }];
+    
+    RAC(self.textField, backgroundColor) = [validTextFieldSignal
+                                            map:^id(NSNumber *textValid) {
+                                                return [textValid boolValue] ? [UIColor whiteColor] : [UIColor darkGrayColor];
+                                            }];
+    
+    [[[self.button rac_signalForControlEvents:UIControlEventTouchUpInside]
+     flattenMap:^RACStream *(id value) {
+         return [self requestSignal];
      }]
-     subscribeNext:^(UIColor *color) {
-         @strongify(self)
-         self.textField.backgroundColor = color;
+     subscribeNext:^(NSNumber *validKeyword) {
+         NSLog(@"result is %@", validKeyword);
+         if ([validKeyword boolValue]) {
+             [self didTappedButton:self.button];
+         }
      }];
 }
 
@@ -133,6 +154,25 @@ static NSString *kTableViewCellIdentifie = @"SecondTableCellIdentifier";
     return text.length > 2;
 }
 
+- (RACSignal *)requestSignal {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [self validRequestKeyword:self.textField.text complete:^(BOOL success) {
+            [subscriber sendNext:@(success)];
+            [subscriber sendCompleted];
+        }];
+        return nil;
+    }];
+}
+
+- (void)validRequestKeyword:(NSString *)keyword complete:(void (^)(BOOL success))completeBlock {
+    if ([keyword isEqualToString:@"weather"]) {
+        completeBlock(YES);
+    }
+    else {
+        completeBlock(NO);
+    }
+}
+
 #pragma mark - getter & setter 
 - (UIView *)backgroundView {
     if (_backgroundView == nil) {
@@ -163,7 +203,7 @@ static NSString *kTableViewCellIdentifie = @"SecondTableCellIdentifier";
         NSAttributedString *highlightAttrtitle = [[NSAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14],
                                                                                                             NSForegroundColorAttributeName:[UIColor whiteColor]}];
         [_button setAttributedTitle:highlightAttrtitle forState:UIControlStateHighlighted];
-        [_button addTarget:self action:@selector(didTappedButton:) forControlEvents:UIControlEventTouchUpInside];
+//        [_button addTarget:self action:@selector(didTappedButton:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _button;
 }
