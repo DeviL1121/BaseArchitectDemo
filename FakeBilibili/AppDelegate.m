@@ -21,7 +21,6 @@
     self.window = [[UIWindow alloc] init];
     self.window.backgroundColor = [UIColor lightGrayColor];
     self.window.rootViewController = [[DLTabBarController alloc] init];
-    NSLog(@"ssbsbsbsbsbsb");
     return YES;
 }
 
