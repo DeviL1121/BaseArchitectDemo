@@ -1,4 +1,7 @@
-reated by https://www.gitignore.io/api/objective-c,objective-c
+# Created by https://www.gitignore.io/api/objective-c,objective-c
+
+#Exclude OS X folder attributes
+.DS_Store
 
 ### Objective-C ###
 # Xcode
