@@ -13,6 +13,7 @@
 #import "MetaDate.h"
 #import "WeatherReformer.h"
 
+
 #define kTextFieldHeight 40
 
 static NSString *kTableViewCellIdentifie = @"SecondTableCellIdentifier";
@@ -147,7 +148,7 @@ static NSString *kTableViewCellIdentifie = @"SecondTableCellIdentifier";
 }
 
 - (void)setNavigation {
-    self.title = @"Assitstant";
+    self.title = @"hahahahah";
 }
 
 - (BOOL)isValidTextField:(NSString *)text {
@@ -203,7 +204,7 @@ static NSString *kTableViewCellIdentifie = @"SecondTableCellIdentifier";
         NSAttributedString *highlightAttrtitle = [[NSAttributedString alloc] initWithString:title attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14],
                                                                                                             NSForegroundColorAttributeName:[UIColor whiteColor]}];
         [_button setAttributedTitle:highlightAttrtitle forState:UIControlStateHighlighted];
-//        [_button addTarget:self action:@selector(didTappedButton:) forControlEvents:UIControlEventTouchUpInside];
+        [_button addTarget:self action:@selector(didTappedButton:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _button;
 }

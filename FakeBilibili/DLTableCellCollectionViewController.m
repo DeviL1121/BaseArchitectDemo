@@ -74,6 +74,7 @@ static NSString *kCollectionItenIdentifier = @"TableCellCollectionItem";
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     return 1;
 }
+
 #pragma mark - getter & setter
 - (UICollectionView *)collectionView {
     if (_collectionView == nil) {
@@ -87,5 +88,6 @@ static NSString *kCollectionItenIdentifier = @"TableCellCollectionItem";
     }
     return _collectionView;
 }
+
 
 @end
